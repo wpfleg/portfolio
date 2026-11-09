@@ -6,126 +6,275 @@
   <meta name="description" content="Portfolio de William Pfleg, étudiant en BTS SIO option SISR.">
   <title>William Pfleg – Portfolio BTS SIO SISR</title>
   <style>
-    :root { --fond: #ffffff; --texte: #1f2430; --discret: #5b6475; --accent: #0a58ca; --carte: #f4f6fa; --bordure: #dde2ec; }
-    @media (prefers-color-scheme: dark) {
-      :root { --fond: #12151c; --texte: #e8ebf2; --discret: #9aa3b5; --accent: #6ea8fe; --carte: #1a1f2a; --bordure: #2b3242; }
+    :root { --fond:#0b1020; --carte:#121a30; --bordure:#24304d; --texte:#e6ebf5; --discret:#93a0bb; --accent:#38d6e8; --accent2:#6c8cff; }
+    * { box-sizing:border-box; }
+    html { scroll-behavior:smooth; }
+    body { margin:0; background:var(--fond); color:var(--texte); font-family:system-ui,-apple-system,"Segoe UI",sans-serif; line-height:1.7; overflow-x:hidden; }
+    a { color:var(--accent); }
+
+    .fond { position:fixed; inset:0; z-index:-1; overflow:hidden; }
+    .blob { position:absolute; width:46vmax; height:46vmax; border-radius:50%; filter:blur(90px); opacity:.28; animation:flotte 22s ease-in-out infinite alternate; }
+    .b1 { background:var(--accent2); top:-15vmax; left:-10vmax; }
+    .b2 { background:var(--accent); bottom:-20vmax; right:-12vmax; animation-delay:-8s; animation-duration:28s; }
+    @keyframes flotte { to { transform:translate(8vmax,6vmax) scale(1.15); } }
+
+    #progression { position:fixed; top:0; left:0; height:3px; width:0; background:linear-gradient(90deg,var(--accent2),var(--accent)); z-index:100; }
+
+    nav { position:sticky; top:0; z-index:50; backdrop-filter:blur(12px); background:rgba(11,16,32,.72); border-bottom:1px solid var(--bordure); }
+    .nav-in { max-width:960px; margin:0 auto; padding:.8rem 1.25rem; display:flex; align-items:center; justify-content:space-between; gap:1rem; }
+    .logo { font-weight:700; letter-spacing:.5px; white-space:nowrap; }
+    .logo span { color:var(--accent); }
+    .liens { display:flex; gap:1.1rem; overflow-x:auto; scrollbar-width:none; }
+    .liens a { color:var(--discret); text-decoration:none; font-size:.95rem; white-space:nowrap; position:relative; padding:.2rem 0; transition:color .2s; }
+    .liens a::after { content:""; position:absolute; left:0; bottom:0; height:2px; width:0; background:var(--accent); transition:width .25s; }
+    .liens a:hover, .liens a.actif { color:var(--texte); }
+    .liens a:hover::after, .liens a.actif::after { width:100%; }
+
+    .page { max-width:960px; margin:0 auto; padding:0 1.25rem 3rem; }
+
+    .hero { min-height:88vh; display:flex; flex-direction:column; justify-content:center; }
+    .salut { color:var(--accent); font-family:ui-monospace,Consolas,monospace; margin:0 0 .5rem; }
+    h1 { font-size:clamp(2.4rem,7vw,4.2rem); line-height:1.1; margin:0; }
+    h1 .degrade { background:linear-gradient(90deg,var(--accent2),var(--accent)); -webkit-background-clip:text; background-clip:text; color:transparent; }
+    .role { font-size:clamp(1.1rem,3vw,1.6rem); color:var(--discret); margin:.8rem 0 0; min-height:2.2em; }
+    .curseur { display:inline-block; width:2px; height:1.1em; background:var(--accent); margin-left:3px; vertical-align:-.15em; animation:clignote 1s steps(1) infinite; }
+    @keyframes clignote { 50% { opacity:0; } }
+    .detail { color:var(--discret); margin:.4rem 0 0; }
+    .boutons { display:flex; flex-wrap:wrap; gap:.8rem; margin-top:2rem; }
+    .btn { display:inline-block; padding:.75rem 1.4rem; border-radius:8px; text-decoration:none; font-weight:600; font-size:1rem; font-family:inherit; cursor:pointer; transition:transform .2s, box-shadow .2s, border-color .2s; }
+    .btn-plein { background:linear-gradient(90deg,var(--accent2),var(--accent)); color:#06101f; border:0; }
+    .btn-plein:hover { transform:translateY(-3px); box-shadow:0 8px 24px rgba(56,214,232,.3); }
+    .btn-vide { border:1px solid var(--bordure); color:var(--texte); }
+    .btn-vide:hover { transform:translateY(-3px); border-color:var(--accent); }
+
+    section { padding:3.5rem 0 .5rem; scroll-margin-top:60px; }
+    h2 { font-size:1.9rem; margin:0 0 1.5rem; display:flex; align-items:center; gap:.8rem; }
+    h2::before { content:""; width:28px; height:3px; background:var(--accent); border-radius:2px; }
+
+    .carte { background:var(--carte); border:1px solid var(--bordure); border-radius:12px; padding:1.3rem 1.4rem; margin:1rem 0; transition:transform .25s, border-color .25s, box-shadow .25s; }
+    .carte:hover { transform:translateY(-5px); border-color:var(--accent); box-shadow:0 12px 30px rgba(0,0,0,.35); }
+    .carte h3 { margin:0 0 .2rem; font-size:1.15rem; }
+    .carte ul { margin:.5rem 0 0; padding-left:1.2rem; }
+    .meta { color:var(--discret); font-size:.92rem; margin:0 0 .7rem; }
+    .tags { display:flex; flex-wrap:wrap; gap:.5rem; margin-top:.7rem; }
+    .tag { background:rgba(56,214,232,.08); border:1px solid rgba(56,214,232,.3); color:var(--accent); border-radius:999px; padding:.15rem .8rem; font-size:.86rem; transition:background .2s, transform .2s; }
+    .tag:hover { background:rgba(56,214,232,.2); transform:scale(1.06); }
+    .grille { display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:1rem; }
+    .grille .carte { margin:0; }
+    .sous { margin:2rem 0 .5rem; font-size:1.1rem; }
+
+    /* Contact */
+    .contact-grille { display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:1rem; }
+    .contact-grille .carte { margin:0; }
+    .contact-liens { list-style:none; padding:0; margin:.8rem 0 0; }
+    .contact-liens li { margin:.5rem 0; }
+    label { display:block; font-size:.9rem; color:var(--discret); margin:.8rem 0 .25rem; }
+    input, textarea { width:100%; background:var(--fond); color:var(--texte); border:1px solid var(--bordure); border-radius:8px; padding:.7rem .85rem; font:inherit; transition:border-color .2s, box-shadow .2s; }
+    input:focus, textarea:focus { outline:none; border-color:var(--accent); box-shadow:0 0 0 3px rgba(56,214,232,.18); }
+    textarea { min-height:130px; resize:vertical; }
+    form .btn { margin-top:1rem; }
+    .note { color:var(--discret); font-size:.85rem; margin:.8rem 0 0; }
+
+    .reveal { opacity:0; transform:translateY(30px); transition:opacity .8s ease, transform .8s ease; }
+    .reveal.visible { opacity:1; transform:none; }
+    .grille .reveal:nth-child(2) { transition-delay:.1s; }
+    .grille .reveal:nth-child(3) { transition-delay:.2s; }
+    .grille .reveal:nth-child(4) { transition-delay:.3s; }
+
+    footer { text-align:center; color:var(--discret); font-size:.9rem; padding:2.5rem 1rem; border-top:1px solid var(--bordure); }
+
+    @media (prefers-reduced-motion:reduce) {
+      * { animation:none !important; transition:none !important; scroll-behavior:auto !important; }
+      .reveal { opacity:1; transform:none; }
     }
-    * { box-sizing: border-box; }
-    body { margin: 0; font-family: system-ui, -apple-system, "Segoe UI", sans-serif; background: var(--fond); color: var(--texte); line-height: 1.65; }
-    .page { max-width: 860px; margin: 0 auto; padding: 2rem 1.25rem 4rem; }
-    nav { display: flex; flex-wrap: wrap; gap: 1rem; padding-bottom: 1rem; border-bottom: 1px solid var(--bordure); }
-    nav a { text-decoration: none; color: var(--discret); font-weight: 500; }
-    nav a:hover { color: var(--accent); }
-    header { padding: 3rem 0 1rem; }
-    h1 { font-size: 2.4rem; margin: 0; }
-    .sous-titre { color: var(--accent); font-size: 1.2rem; margin: .4rem 0 0; font-weight: 600; }
-    .detail { color: var(--discret); margin: .3rem 0 0; }
-    h2 { margin-top: 3rem; padding-bottom: .4rem; border-bottom: 2px solid var(--accent); display: inline-block; }
-    .carte { background: var(--carte); border: 1px solid var(--bordure); border-radius: 10px; padding: 1.1rem 1.25rem; margin: 1rem 0; }
-    .carte h3 { margin: 0 0 .3rem; }
-    .meta { color: var(--discret); font-size: .92rem; margin: 0 0 .6rem; }
-    .tags { display: flex; flex-wrap: wrap; gap: .5rem; margin-top: .6rem; }
-    .tag { background: var(--fond); border: 1px solid var(--bordure); border-radius: 999px; padding: .15rem .75rem; font-size: .88rem; }
-    .grille { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1rem; }
-    a { color: var(--accent); }
-    footer { margin-top: 4rem; color: var(--discret); font-size: .9rem; border-top: 1px solid var(--bordure); padding-top: 1rem; }
   </style>
 </head>
 <body>
+<div class="fond"><div class="blob b1"></div><div class="blob b2"></div></div>
+<div id="progression"></div>
+
+<nav>
+  <div class="nav-in">
+    <div class="logo">W<span>.</span>Pfleg</div>
+    <div class="liens">
+      <a href="#apropos">À propos</a>
+      <a href="#parcours">Parcours</a>
+      <a href="#stages">Stages</a>
+      <a href="#projets">Projets</a>
+      <a href="#competences">Compétences</a>
+      <a href="#veille">Veille</a>
+      <a href="#contact">Contact</a>
+    </div>
+  </div>
+</nav>
+
 <div class="page">
 
-  <nav>
-    <a href="#apropos">À propos</a>
-    <a href="#stages">Stages</a>
-    <a href="#projets">Projets</a>
-    <a href="#competences">Compétences</a>
-    <a href="#veille">Veille</a>
-    <a href="#contact">Contact</a>
-  </nav>
-
-  <header>
-    <h1>William Pfleg</h1>
-    <p class="sous-titre">Étudiant en BTS SIO – option SISR</p>
-    <p class="detail">Lycée des métiers René Cassin · 2e année · Examen en 2027</p>
+  <header class="hero">
+    <p class="salut">Bonjour, je suis</p>
+    <h1><span class="degrade">William Pfleg</span></h1>
+    <p class="role"><span id="texte"></span><span class="curseur"></span></p>
+    <p class="detail">Étudiant en BTS SIO option SISR · Lycée des métiers René Cassin · Examen en 2027</p>
+    <div class="boutons">
+      <a class="btn btn-plein" href="#projets">Voir mes projets</a>
+      <a class="btn btn-vide" href="#contact">Me contacter</a>
+    </div>
   </header>
 
   <section id="apropos">
-    <h2>À propos</h2>
-    <p>
-      Étudiant en 2e année de BTS Services informatiques aux organisations, option Solutions d’infrastructure,
-      systèmes et réseaux, je me forme à l’administration des systèmes, aux réseaux et à la supervision.
-      Je souhaite poursuivre en licence professionnelle à Strasbourg, dans le domaine de la sécurité
-      et de l’administration des systèmes.
-    </p>
+    <h2 class="reveal">À propos</h2>
+    <div class="carte reveal">
+      <p style="margin:0">
+        Étudiant en 2e année de BTS Services informatiques aux organisations, option Solutions d’infrastructure,
+        systèmes et réseaux, je me forme à l’administration des systèmes, aux réseaux et à la supervision.
+        Je souhaite poursuivre en licence professionnelle à Strasbourg, dans le domaine de la sécurité
+        et de l’administration des systèmes.
+      </p>
+    </div>
+  </section>
+
+  <section id="parcours">
+    <h2 class="reveal">Parcours</h2>
+    <div class="carte reveal">
+      <h3>BTS SIO option SISR</h3>
+      <p class="meta">Lycée des métiers René Cassin · 2025 – 2027</p>
+      <p style="margin:0">Solutions d’infrastructure, systèmes et réseaux.</p>
+    </div>
+    <div class="carte reveal">
+      <h3>Baccalauréat STI2D, spécialité SIN</h3>
+      <p class="meta">Lycée Heinrich Nessel, Haguenau · 2025 · Mention assez bien</p>
+      <p style="margin:0">Systèmes d’information et numérique.</p>
+    </div>
   </section>
 
   <section id="stages">
-    <h2>Stages</h2>
-    <div class="carte">
-      <h3>Stage de 1re année – Service informatique de la CAF</h3>
-      <p class="meta">Rechshoffen</p>
-      <p>
-        Installation et mise en place d’une solution de supervision basée sur Zabbix et Grafana.
-      </p>
-      <div class="tags"><span class="tag">Zabbix</span><span class="tag">Grafana</span><span class="tag">Supervision</span></div>
+    <h2 class="reveal">Stages</h2>
+    <div class="carte reveal">
+      <h3>Stagiaire administrateur réseau – CAF</h3>
+      <p class="meta">Service informatique · Reichshoffen · Juin – juillet 2026 (5 semaines)</p>
+      <p>Découverte du métier d’administrateur systèmes et réseaux au sein du service informatique.</p>
+      <ul>
+        <li>Installation et mise en place d’une solution de supervision avec Zabbix et Grafana</li>
+        <li>Support informatique de niveau 2 auprès des utilisateurs</li>
+        <li>Gestion de parc informatique</li>
+        <li>Réalisation de documentations techniques</li>
+      </ul>
+      <div class="tags">
+        <span class="tag">Zabbix</span><span class="tag">Grafana</span><span class="tag">Supervision</span>
+        <span class="tag">Support N2</span><span class="tag">Documentation</span><span class="tag">Gestion de parc</span>
+      </div>
     </div>
   </section>
 
   <section id="projets">
-    <h2>Projets</h2>
-    <div class="carte">
+    <h2 class="reveal">Projets</h2>
+    <div class="carte reveal">
       <h3>Nom du projet</h3>
       <p class="meta">Contexte : cours / stage / projet personnel</p>
-      <p>Objectif du projet, ce que vous avez réalisé et le résultat obtenu.</p>
+      <p style="margin:0">Objectif du projet, ce que j’ai réalisé et le résultat obtenu.</p>
       <div class="tags"><span class="tag">Techno 1</span><span class="tag">Techno 2</span></div>
-      <p><a href="https://github.com/wpfleg">Voir la documentation</a></p>
     </div>
   </section>
 
   <section id="competences">
-    <h2>Compétences</h2>
+    <h2 class="reveal">Compétences</h2>
     <div class="grille">
-      <div class="carte">
-        <h3>Systèmes</h3>
-        <div class="tags"><span class="tag">Windows Server</span><span class="tag">Linux</span></div>
-      </div>
-      <div class="carte">
-        <h3>Réseaux</h3>
-        <div class="tags"><span class="tag">Routage</span><span class="tag">Cisco</span><span class="tag">VLAN</span></div>
-      </div>
-      <div class="carte">
-        <h3>Supervision</h3>
-        <div class="tags"><span class="tag">Zabbix</span><span class="tag">Grafana</span></div>
-      </div>
-      <div class="carte">
-        <h3>Langues</h3>
-        <div class="tags"><span class="tag">Anglais – B2</span></div>
-      </div>
+      <div class="carte reveal"><h3>Systèmes</h3><div class="tags"><span class="tag">Windows Server</span><span class="tag">Linux</span></div></div>
+      <div class="carte reveal"><h3>Réseaux</h3><div class="tags"><span class="tag">Routage</span><span class="tag">Cisco</span><span class="tag">VLAN</span></div></div>
+      <div class="carte reveal"><h3>Supervision</h3><div class="tags"><span class="tag">Zabbix</span><span class="tag">Grafana</span></div></div>
+      <div class="carte reveal"><h3>Langues</h3><div class="tags"><span class="tag">Anglais – B2</span><span class="tag">Allemand</span></div></div>
     </div>
-
-    <h3>Certifications</h3>
-    <div class="tags">
-      <span class="tag">MOOC SecNumacadémie</span>
-      <span class="tag">PIX</span>
-    </div>
+    <h3 class="sous reveal">Certifications</h3>
+    <div class="tags reveal"><span class="tag">MOOC SecNumacadémie</span><span class="tag">PIX</span></div>
   </section>
 
   <section id="veille">
-    <h2>Veille technologique</h2>
-    <p>Thème de ma veille, sources utilisées et synthèses : à compléter.</p>
+    <h2 class="reveal">Veille technologique</h2>
+    <div class="carte reveal"><p style="margin:0">Thème de ma veille, sources utilisées et synthèses : à compléter.</p></div>
   </section>
 
   <section id="contact">
-    <h2>Contact</h2>
-    <p>
-      Email : <a href="mailto:pflegwilliam@gmail.com">pflegwilliam@gmail.com</a><br>
-      LinkedIn : <a href="https://www.linkedin.com/in/william-pfleg-205462355/">william-pfleg</a><br>
-      GitHub : <a href="https://github.com/wpfleg">wpfleg</a>
-    </p>
+    <h2 class="reveal">Contact</h2>
+    <div class="contact-grille">
+      <div class="carte reveal">
+        <h3>Me joindre</h3>
+        <p class="meta" style="margin-bottom:0">Une question, une opportunité de stage ou d’alternance ? Écrivez-moi.</p>
+        <ul class="contact-liens">
+          <li>Email : <a href="mailto:pflegwilliam@gmail.com">pflegwilliam@gmail.com</a></li>
+          <li>LinkedIn : <a href="https://www.linkedin.com/in/william-pfleg-205462355/" target="_blank" rel="noopener">william-pfleg</a></li>
+          <li>GitHub : <a href="https://github.com/wpfleg" target="_blank" rel="noopener">wpfleg</a></li>
+        </ul>
+      </div>
+
+      <div class="carte reveal">
+        <h3>Envoyer un message</h3>
+        <form id="formulaire">
+          <label for="nom">Votre nom</label>
+          <input id="nom" type="text" required autocomplete="name">
+          <label for="email">Votre email</label>
+          <input id="email" type="email" required autocomplete="email">
+          <label for="message">Message</label>
+          <textarea id="message" required></textarea>
+          <button class="btn btn-plein" type="submit">Envoyer</button>
+        </form>
+        <p class="note">Le bouton ouvre votre application de messagerie avec le message prérempli.</p>
+      </div>
+    </div>
   </section>
 
-  <footer>© 2026 William Pfleg</footer>
-
 </div>
+
+<footer>© 2026 William Pfleg</footer>
+
+<script>
+  // Texte qui s'écrit
+  var roles = ["Administration systèmes et réseaux", "Supervision et sécurité", "Futur administrateur systèmes"];
+  var cible = document.getElementById("texte");
+  var r = 0, i = 0, efface = false;
+  function ecrire() {
+    var mot = roles[r];
+    cible.textContent = mot.slice(0, i);
+    if (!efface && i < mot.length) { i++; setTimeout(ecrire, 70); }
+    else if (!efface) { efface = true; setTimeout(ecrire, 1600); }
+    else if (i > 0) { i--; setTimeout(ecrire, 35); }
+    else { efface = false; r = (r + 1) % roles.length; setTimeout(ecrire, 300); }
+  }
+  ecrire();
+
+  // Apparition au défilement
+  var obs = new IntersectionObserver(function (entrees) {
+    entrees.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add("visible"); obs.unobserve(e.target); } });
+  }, { threshold: 0.12 });
+  document.querySelectorAll(".reveal").forEach(function (el) { obs.observe(el); });
+
+  // Barre de progression
+  var barre = document.getElementById("progression");
+  window.addEventListener("scroll", function () {
+    var h = document.documentElement.scrollHeight - window.innerHeight;
+    barre.style.width = (h > 0 ? (window.scrollY / h) * 100 : 0) + "%";
+  });
+
+  // Lien de menu actif
+  var liens = document.querySelectorAll(".liens a");
+  var nav = new IntersectionObserver(function (entrees) {
+    entrees.forEach(function (e) {
+      if (e.isIntersecting) {
+        liens.forEach(function (l) { l.classList.toggle("actif", l.getAttribute("href") === "#" + e.target.id); });
+      }
+    });
+  }, { rootMargin: "-40% 0px -55% 0px" });
+  document.querySelectorAll("section").forEach(function (s) { nav.observe(s); });
+
+  // Formulaire de contact : ouvre la messagerie du visiteur
+  document.getElementById("formulaire").addEventListener("submit", function (ev) {
+    ev.preventDefault();
+    var nom = document.getElementById("nom").value;
+    var email = document.getElementById("email").value;
+    var message = document.getElementById("message").value;
+    var sujet = "Contact depuis votre portfolio – " + nom;
+    var corps = message + "\n\n" + nom + "\n" + email;
+    window.location.href = "mailto:pflegwilliam@gmail.com?subject=" + encodeURIComponent(sujet) + "&body=" + encodeURIComponent(corps);
+  });
+</script>
 </body>
 </html>

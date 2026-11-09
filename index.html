@@ -12,14 +12,17 @@
     body { margin:0; background:var(--fond); color:var(--texte); font-family:system-ui,-apple-system,"Segoe UI",sans-serif; line-height:1.7; overflow-x:hidden; }
     a { color:var(--accent); }
 
+    /* Fond animé */
     .fond { position:fixed; inset:0; z-index:-1; overflow:hidden; }
     .blob { position:absolute; width:46vmax; height:46vmax; border-radius:50%; filter:blur(90px); opacity:.28; animation:flotte 22s ease-in-out infinite alternate; }
     .b1 { background:var(--accent2); top:-15vmax; left:-10vmax; }
     .b2 { background:var(--accent); bottom:-20vmax; right:-12vmax; animation-delay:-8s; animation-duration:28s; }
     @keyframes flotte { to { transform:translate(8vmax,6vmax) scale(1.15); } }
 
+    /* Barre de progression */
     #progression { position:fixed; top:0; left:0; height:3px; width:0; background:linear-gradient(90deg,var(--accent2),var(--accent)); z-index:100; }
 
+    /* Navigation */
     nav { position:sticky; top:0; z-index:50; backdrop-filter:blur(12px); background:rgba(11,16,32,.72); border-bottom:1px solid var(--bordure); }
     .nav-in { max-width:960px; margin:0 auto; padding:.8rem 1.25rem; display:flex; align-items:center; justify-content:space-between; gap:1rem; }
     .logo { font-weight:700; letter-spacing:.5px; white-space:nowrap; }
@@ -32,6 +35,7 @@
 
     .page { max-width:960px; margin:0 auto; padding:0 1.25rem 3rem; }
 
+    /* Hero */
     .hero { min-height:88vh; display:flex; flex-direction:column; justify-content:center; }
     .salut { color:var(--accent); font-family:ui-monospace,Consolas,monospace; margin:0 0 .5rem; }
     h1 { font-size:clamp(2.4rem,7vw,4.2rem); line-height:1.1; margin:0; }
@@ -47,6 +51,7 @@
     .btn-vide { border:1px solid var(--bordure); color:var(--texte); }
     .btn-vide:hover { transform:translateY(-3px); border-color:var(--accent); }
 
+    /* Sections */
     section { padding:3.5rem 0 .5rem; scroll-margin-top:60px; }
     h2 { font-size:1.9rem; margin:0 0 1.5rem; display:flex; align-items:center; gap:.8rem; }
     h2::before { content:""; width:28px; height:3px; background:var(--accent); border-radius:2px; }
@@ -61,7 +66,20 @@
     .tag:hover { background:rgba(56,214,232,.2); transform:scale(1.06); }
     .grille { display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:1rem; }
     .grille .carte { margin:0; }
-    .sous { margin:2rem 0 .5rem; font-size:1.1rem; }
+    .sous { margin:2rem 0 .8rem; font-size:1.1rem; }
+
+    /* Certifications */
+    .certifs { display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:1rem; }
+    .certif { margin:0; background:var(--carte); border:1px solid var(--bordure); border-radius:12px; overflow:hidden; cursor:zoom-in; transition:transform .25s, border-color .25s, box-shadow .25s; }
+    .certif:hover { transform:translateY(-5px); border-color:var(--accent); box-shadow:0 12px 30px rgba(0,0,0,.35); }
+    .certif img { display:block; width:100%; height:200px; object-fit:cover; object-position:top; transition:transform .4s; }
+    .certif:hover img { transform:scale(1.04); }
+    .certif figcaption { padding:.8rem 1rem; font-weight:600; border-top:1px solid var(--bordure); }
+
+    #lightbox { position:fixed; inset:0; z-index:200; display:none; align-items:center; justify-content:center; padding:1.5rem; background:rgba(5,8,16,.92); cursor:zoom-out; }
+    #lightbox.ouvert { display:flex; animation:apparait .25s ease; }
+    #lightbox img { max-width:100%; max-height:90vh; border-radius:8px; box-shadow:0 20px 60px rgba(0,0,0,.6); }
+    @keyframes apparait { from { opacity:0; } to { opacity:1; } }
 
     /* Contact */
     .contact-grille { display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:1rem; }
@@ -75,9 +93,10 @@
     form .btn { margin-top:1rem; }
     .note { color:var(--discret); font-size:.85rem; margin:.8rem 0 0; }
 
+    /* Apparition au défilement */
     .reveal { opacity:0; transform:translateY(30px); transition:opacity .8s ease, transform .8s ease; }
     .reveal.visible { opacity:1; transform:none; }
-    .grille .reveal:nth-child(2) { transition-delay:.1s; }
+    .grille .reveal:nth-child(2), .certifs .reveal:nth-child(2) { transition-delay:.1s; }
     .grille .reveal:nth-child(3) { transition-delay:.2s; }
     .grille .reveal:nth-child(4) { transition-delay:.3s; }
 
@@ -184,8 +203,18 @@
       <div class="carte reveal"><h3>Supervision</h3><div class="tags"><span class="tag">Zabbix</span><span class="tag">Grafana</span></div></div>
       <div class="carte reveal"><h3>Langues</h3><div class="tags"><span class="tag">Anglais – B2</span><span class="tag">Allemand</span></div></div>
     </div>
+
     <h3 class="sous reveal">Certifications</h3>
-    <div class="tags reveal"><span class="tag">MOOC SecNumacadémie</span><span class="tag">PIX</span></div>
+    <div class="certifs">
+      <figure class="certif reveal">
+        <img src="secnumacademie.jpg" alt="Attestation de réussite au MOOC SecNumacadémie" loading="lazy">
+        <figcaption>MOOC SecNumacadémie</figcaption>
+      </figure>
+      <figure class="certif reveal">
+        <img src="pix.jpg" alt="Attestation de certification PIX" loading="lazy">
+        <figcaption>PIX</figcaption>
+      </figure>
+    </div>
   </section>
 
   <section id="veille">
@@ -226,6 +255,8 @@
 
 <footer>© 2026 William Pfleg</footer>
 
+<div id="lightbox"><img alt=""></div>
+
 <script>
   // Texte qui s'écrit
   var roles = ["Administration systèmes et réseaux", "Supervision et sécurité", "Futur administrateur systèmes"];
@@ -264,6 +295,20 @@
     });
   }, { rootMargin: "-40% 0px -55% 0px" });
   document.querySelectorAll("section").forEach(function (s) { nav.observe(s); });
+
+  // Zoom sur les certifications
+  var lb = document.getElementById("lightbox");
+  var lbImg = lb.querySelector("img");
+  document.querySelectorAll(".certif").forEach(function (f) {
+    f.addEventListener("click", function () {
+      var im = f.querySelector("img");
+      lbImg.src = im.src;
+      lbImg.alt = im.alt;
+      lb.classList.add("ouvert");
+    });
+  });
+  lb.addEventListener("click", function () { lb.classList.remove("ouvert"); });
+  document.addEventListener("keydown", function (e) { if (e.key === "Escape") lb.classList.remove("ouvert"); });
 
   // Formulaire de contact : ouvre la messagerie du visiteur
   document.getElementById("formulaire").addEventListener("submit", function (ev) {
